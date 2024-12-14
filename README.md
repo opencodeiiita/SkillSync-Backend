@@ -42,9 +42,12 @@ To get started with the backend of SkillSync, follow these steps:
    npm install
 3. **Configure environment variables**:
 
-   Create a `.env` file in the root directory and add your environment variables. Example:
-
-
+  
+bash
+  Create a .env file in the root directory and add your environment variables. Example:
+  MONGODB_URI=mongodb://localhost:27017/skillsync
+  JWT_SECRET=your_jwt_secret_key
+  PORT=5000
 
 4. **Start the server**:
 
@@ -54,11 +57,11 @@ To get started with the backend of SkillSync, follow these steps:
 ---
 
 
-##The backend will be available at http://localhost:5000.
+## The backend will be available at http://localhost:5000.
 
 ---
 
-## Contributions
+##  Contributions
 Contributions are welcome! Please follow these steps:
 1. Fork the repository.
 2. 2. Create a new branch (`git checkout -b feature/your-feature-name`).
