@@ -1,7 +1,14 @@
-const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const crypto = require("crypto");
+
+// const mongoose = require("mongoose");
+// const bcrypt = require("bcrypt");
+// const jwt = require("jsonwebtoken");
+// const crypto = require("crypto");
+// type: module used in server.js 
+
+import mongoose from "mongoose";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import crypto from "crypto";
 
 
 const UserSchema = new mongoose.Schema({
