@@ -56,6 +56,7 @@ const UserProfileSchema = new mongoose.Schema(
     profilePicture: {
       type: String, // URL to the profile picture
       match: [/^https?:\/\/.+\.(jpg|jpeg|png|webp|gif)$/, "Invalid image URL"],
+      default: "https://avatar.iran.liara.run/public/boy?username=Ash",
     },
     portfolio: {
       type: String, 
