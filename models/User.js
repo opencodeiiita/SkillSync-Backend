@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 /* Fields:
 FIELD	        TYPE	        REQUIRED	    DESCRIPTION
@@ -73,4 +73,4 @@ UserProfileSchema.index({ skills: 1 });
 
 const UserProfile = mongoose.model("UserProfile", UserProfileSchema);
 
-module.exports = UserProfile;
+export default UserProfile;
