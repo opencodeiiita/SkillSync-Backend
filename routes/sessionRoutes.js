@@ -3,7 +3,7 @@ import { createSession, rescheduleSession, cancelSession } from '../controllers/
 
 const router = express.Router();
 
-router.post('/create', createSession);
+router.post('/schedule', createSession);
 
 router.put('/reschedule/:id', rescheduleSession);
 
