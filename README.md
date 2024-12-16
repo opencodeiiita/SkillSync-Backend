@@ -1,1 +1,1 @@
-# SkillSync-Backend
+# SkillSync_Backend
