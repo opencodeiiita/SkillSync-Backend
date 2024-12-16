@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 /* Fields:
 FIELD	        TYPE	        REQUIRED	    DESCRIPTION
@@ -41,7 +41,7 @@ const UserProfileSchema = new mongoose.Schema(
       match: [/^\S+@\S+\.\S+$/, "Please use a valid email address"],
     },
     skills: {
-      type: [String], 
+      type: [String],
       validate: {
         validator: function (v) {
           return v.length > 0; // At least one skill must be provided
@@ -58,19 +58,16 @@ const UserProfileSchema = new mongoose.Schema(
       match: [/^https?:\/\/.+\.(jpg|jpeg|png|webp|gif)$/, "Invalid image URL"],
     },
     portfolio: {
-      type: String, 
+      type: String,
       match: [/^https?:\/\/.+/, "Invalid portfolio URL"],
     },
   },
   {
-    timestamps: true, 
+    timestamps: true,
   }
 );
-
 
 UserProfileSchema.index({ email: 1 }, { unique: true });
 UserProfileSchema.index({ skills: 1 });
 
-const UserProfile = mongoose.model("UserProfile", UserProfileSchema);
-
-module.exports = UserProfile;
+export default mongoose.model("UserProfile", UserProfileSchema);
