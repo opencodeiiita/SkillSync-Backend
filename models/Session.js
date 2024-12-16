@@ -15,11 +15,20 @@ const sessionSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    sessionName: {
+      type: String,
+      required: true,
+    },
     status: {
       type: String,
       required: true,
       enum: ["scheduled", "completed", "cancelled"],
       default: "scheduled",
+    },
+    sessionType: {
+      type: String,
+      required: true,
+      default: "NA",
     },
     duration: {
       type: Number,  // duration in minutes
