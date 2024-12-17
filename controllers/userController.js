@@ -1,5 +1,4 @@
-import UserProfile from "../models/User.js";
-
+const UserProfile = require('../models/UserProfile');
 export async function handleCreateuser(req,res){
     try {
         const user = req.body;
@@ -15,7 +14,9 @@ export async function handleCreateuser(req,res){
         if(!user.skills || user.skills.length === 0 ){
         return res.json({error:"At least one skill is required"});
         }
-    
+        if(!user.profilePicture){
+            user.profilePicture = "https://avatar.iran.liara.run/public/boy?username=Ash";
+        }
         const newUser = new UserProfile(user);
         await newUser.save();
         return res.json({message:"User created successfully",user:newUser});

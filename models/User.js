@@ -1,5 +1,4 @@
-import mongoose from "mongoose";
-
+const mongoose = require('mongoose');
 /* Fields:
 FIELD	        TYPE	        REQUIRED	    DESCRIPTION
 name	        String	        Yes	            Full name of the user (min. 2 characters).
@@ -56,7 +55,6 @@ const UserProfileSchema = new mongoose.Schema(
     profilePicture: {
       type: String, // URL to the profile picture
       match: [/^https?:\/\/.+\.(jpg|jpeg|png|webp|gif)$/, "Invalid image URL"],
-      default: "https://avatar.iran.liara.run/public/boy?username=Ash",
     },
     portfolio: {
       type: String, 
@@ -74,4 +72,4 @@ UserProfileSchema.index({ skills: 1 });
 
 const UserProfile = mongoose.model("UserProfile", UserProfileSchema);
 
-export default UserProfile;
+module.exports = UserProfile;
