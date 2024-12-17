@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import connectDb from "./config/db.js";
 import User from "./models/User.js";
 import sessionRoutes from "./routes/sessionRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 
 const app = express();
 
@@ -36,8 +37,8 @@ app.post("/register", async (req, res) => {
     });
   }
 });
-
 app.use("/session", sessionRoutes);
+app.use("/api/users", userRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).send("Hello World!");
