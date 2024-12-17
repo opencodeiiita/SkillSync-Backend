@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import connectDb from "./config/db.js";
 import User from "./models/User.js";
 import sessionRoutes from "./routes/sessionRoutes.js";
+import userRouter from "./routes/userRoutes.js";
 
 const app = express();
 
@@ -12,12 +13,14 @@ app.use(express.urlencoded({ extended: true }));
 dotenv.config();
 connectDb();
 
+app.use('/api/users', userRouter);
+
 app.post("/register", async (req, res) => {
   const { fullName, email, username, password } = req.body;
 
   try {
     const user = new User({
-      fullName,
+      name:fullName,
       email,
       username,
       password,

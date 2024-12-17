@@ -1,7 +1,10 @@
 import express from 'express';
 const router = express.Router();
-import {handleCreateuser} from '../controllers/userController.js'
-router.post('/profile',handleCreateuser);
+import {handleCreateUser, handleUpdateUser} from '../controllers/userController.js';
+
+
+router.post('/register',handleCreateUser);
+router.put('/profile/:id',handleUpdateUser);
 
 export default router;
 
