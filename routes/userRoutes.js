@@ -1,12 +1,7 @@
-import express from "express";
-import { updateUserProfile } from "../controllers/userController.js";
 
+import express from 'express';
 const router = express.Router();
-
-router.get("/", (req, res) => {
-  res.status(201).send("Hello World!");
-});
-
-router.put("/profile/:id", updateUserProfile);
+import {handleCreateuser} from '../controllers/userController.js'
+router.post('/profile',handleCreateuser);
 
 export default router;
