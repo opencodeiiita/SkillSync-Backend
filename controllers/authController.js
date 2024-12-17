@@ -97,7 +97,13 @@ export const signin = async (req, res) => {
     res.status(200).json({
       message: "User logged in successfully.",
       error: false,
-      result: true
+      result: true,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        username: user.username,
+      },
     });
 
   } 
