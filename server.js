@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import connectDb from "./config/db.js";
 import User from "./models/User.js";
 import sessionRoutes from "./routes/sessionRoutes.js";
+import userRoutes from "./routes/userRoutes.js"; // import userRoutes
 
 const app = express();
 
@@ -11,6 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 
 dotenv.config();
 connectDb();
+
 
 app.post("/register", async (req, res) => {
   const { fullName, email, username, password } = req.body;
@@ -37,11 +39,16 @@ app.post("/register", async (req, res) => {
   }
 });
 
+
+app.use("/api/users", userRoutes); 
+
 app.use("/session", sessionRoutes);
+
 
 app.get("/", (req, res) => {
   res.status(200).send("Hello World!");
 });
+
 
 app.use((err, req, res, next) => {
   console.error(err);
@@ -50,7 +57,10 @@ app.use((err, req, res, next) => {
   });
 });
 
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+export default app; // to use for testing
