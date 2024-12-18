@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import connectDb from "./config/db.js";
 import User from "./models/User.js";
 import sessionRoutes from "./routes/sessionRoutes.js";
+import userRoutes from "./routes/userRoutes.js"; // import userRoutes
 
 // Load environment variables
 dotenv.config();
@@ -22,7 +23,11 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// User registration route
+
+dotenv.config();
+connectDb();
+
+
 app.post("/register", async (req, res) => {
   const { fullName, email, username, password } = req.body;
 
@@ -48,15 +53,24 @@ app.post("/register", async (req, res) => {
   }
 });
 
+
+
+app.use("/api/users", userRoutes); 
+
+app.use("/session", sessionRoutes);
+
+
+
 // Session routes
 app.use("/session", sessionRoutes);
 
 // Root route
+
 app.get("/", (req, res) => {
   res.status(200).send("Hello World!");
 });
 
-// Error handling middleware
+
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(err.statusCode || 500).json({
@@ -64,8 +78,9 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+export default app; // to use for testing

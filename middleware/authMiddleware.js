@@ -1,3 +1,5 @@
+
+
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const { unauthorizedResponse, serverErrorResponse } = require('../utils/responseCode.utils');
@@ -33,3 +35,4 @@ const authMiddleware = async (req, res, next) => {
 };
 
 module.exports = authMiddleware;
+
