@@ -1,12 +1,10 @@
-
-
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
-const { unauthorizedResponse, serverErrorResponse } = require('../utils/responseCode.utils');
+import jwt from 'jsonwebtoken'
+import User from '../models/User.js';
+import { unauthorizedResponse, serverErrorResponse } from '../utils/responseCode.utils.js';
 
 //authMiddleware extracts JWT from req.cookies.token, validates it, and attaches req.userId and req.user
 
-const authMiddleware = async (req, res, next) => {
+export const authMiddleware = async (req, res, next) => {
   try {
     let token = req.cookies.token;
 
@@ -34,5 +32,4 @@ const authMiddleware = async (req, res, next) => {
   }
 };
 
-module.exports = authMiddleware;
-
+export default authMiddleware;

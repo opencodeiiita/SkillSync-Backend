@@ -1,7 +1,7 @@
 import User from '../models/User.js' 
 import bcrypt from "bcrypt";
 
-export async function handleCreateUser(req, res) {
+export const handleCreateUser = async (req, res) => {
   try {
     const { name, email, password, skills, bio, profilePicture, portfolio } = req.body;
 
@@ -97,3 +97,5 @@ export const handleUpdateUser = async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 };
+
+
