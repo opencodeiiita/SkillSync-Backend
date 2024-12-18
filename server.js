@@ -5,22 +5,33 @@ import User from "./models/User.js";
 import sessionRoutes from "./routes/sessionRoutes.js";
 import userRouter from "./routes/userRoutes.js";
 
+// Load environment variables
+dotenv.config();
+
+// Check for MONGO_URI
+if (!process.env.MONGODB_URI) {
+  console.error("Error: MongoDB URI is missing in environment variables.");
+  process.exit(1); // Exit the process with an error
+}
+
+// Connect to the database
+connectDb();
+
 const app = express();
 
+// Middleware for parsing JSON and URL-encoded data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-dotenv.config();
-connectDb();
-
 app.use('/api/users', userRouter);
 
+// User registration route
 app.post("/register", async (req, res) => {
   const { fullName, email, username, password } = req.body;
 
   try {
     const user = new User({
-      name:fullName,
+      fullName,
       email,
       username,
       password,
@@ -40,12 +51,15 @@ app.post("/register", async (req, res) => {
   }
 });
 
+// Session routes
 app.use("/session", sessionRoutes);
 
+// Root route
 app.get("/", (req, res) => {
   res.status(200).send("Hello World!");
 });
 
+// Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(err.statusCode || 500).json({
@@ -53,6 +67,7 @@ app.use((err, req, res, next) => {
   });
 });
 
+// Start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
