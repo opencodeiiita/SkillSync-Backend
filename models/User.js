@@ -1,9 +1,11 @@
 
+
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 dotenv.config();
+
 
 /* Fields:
 FIELD	          TYPE	          REQUIRED	      DESCRIPTION
@@ -66,13 +68,18 @@ const UserSchema = new mongoose.Schema(
       maxlength: [500, "Bio cannot exceed 500 characters"],
     },
     profilePicture: {
-      type: String, 
-      maxlength: [1000, "Too Long for a pic link"]//Could not Add a solid Validation as valid links are just very versatile with queries at end etc.
-    },      
-    portfolio: {
-      type: String,
-      match: [/^https?:\/\/.+/, "Invalid portfolio URL"],
+
+      type: String, // URL to the profile picture
+      match: [/^https?:\/\/.+\.(jpg|jpeg|png|webp|gif)$/, "Invalid image URL"],
     },
+    portfolio: [
+      {
+        title: { type: String, required: true },
+        url: { type: String, required: true, match: [/^https?:\/\/.+/, "Invalid portfolio URL"] },
+        description: { type: String, maxlength: [500, "Description cannot exceed 500 characters"] },
+      },
+    ], // array of portfolio items
+
   },
   {
     timestamps: true, 
@@ -97,6 +104,7 @@ UserSchema.methods.comparePassword = async function (candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
+
 UserSchema.methods.generateAuthToken = function () {
   const payload = { id: this._id };
   const token = jwt.sign(payload, process.env.JWT_SECRET);
@@ -106,4 +114,4 @@ UserSchema.methods.generateAuthToken = function () {
 const User = mongoose.model("User", UserSchema);
 
 export default User;
-  
+
