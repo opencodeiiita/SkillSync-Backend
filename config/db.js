@@ -1,8 +1,10 @@
 import mongoose from "mongoose";
 
-// Connect to MongoDB
 const connectDb = async () => {
-  const mongoURI = process.env.MONGODB_URI;
+  const mongoURI = process.env.MONGO_URI;
+
+  // Debug: Log the URI to confirm it's being loaded
+  console.log("MONGO_URI from env:", mongoURI);
 
   if (!mongoURI) {
     console.error("MongoDB URI is missing in environment variables.");

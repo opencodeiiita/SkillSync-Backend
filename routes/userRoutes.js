@@ -1,4 +1,7 @@
+
 import express from "express";
+import {handleCreateuser} from '../controllers/userController.js'
+router.post('/profile',handleCreateuser);
 import UserProfile from "../models/User.js";
 import { authenticateUser } from "../middleware/authMiddleware.js";
 
@@ -102,3 +105,4 @@ router.put("/profile/:id/portfolio/:portfolioId", authenticateUser, async (req, 
 });
 
 export default router;
+

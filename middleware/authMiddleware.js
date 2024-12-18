@@ -1,24 +1,38 @@
-import jwt from "jsonwebtoken";
 
 
-export const authenticateUser = (req, res, next) => {
-  
-  const token = req.header("Authorization")?.replace("Bearer ", "");
+const jwt = require('jsonwebtoken');
+const User = require('../models/User');
+const { unauthorizedResponse, serverErrorResponse } = require('../utils/responseCode.utils');
 
-  if (!token) {
-    return res.status(401).json({ message: "Authentication failed: No token provided" });
-  }
+//authMiddleware extracts JWT from req.cookies.token, validates it, and attaches req.userId and req.user
 
+const authMiddleware = async (req, res, next) => {
   try {
-    
+    let token = req.cookies.token;
+
+    if (!token) {
+      return unauthorizedResponse(res, 'No token provided. Authentication failed.');
+    }
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    if (!decoded || !decoded.id) {
+      return unauthorizedResponse(res, 'Invalid or expired token.');
+    }
 
-    
-    req.user = decoded;
+    const user = await User.findById(decoded.id).select('-password'); // Exclude password
+    if (!user) {
+      return unauthorizedResponse(res, 'User does not exist.');
+    }
 
-    
+    req.userId = user._id;
+    req.user = user;
+
     next();
   } catch (error) {
-    return res.status(401).json({ message: "Authentication failed: Invalid token" });
+    console.error('Auth Middleware Error:', error.message);
+    return serverErrorResponse(res, 'Internal server error during authentication.');
   }
 };
+
+module.exports = authMiddleware;
+
