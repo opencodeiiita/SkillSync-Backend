@@ -23,11 +23,6 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
-dotenv.config();
-connectDb();
-
-
 app.post("/register", async (req, res) => {
   const { fullName, email, username, password } = req.body;
 
