@@ -151,3 +151,67 @@ export const cancelSession = async (req, res) => {
     });
   }
 };
+
+
+// Utility function to get available time slots in a given interval
+export const getAvailableSlotsInInterval = async (userId, startTime, endTime) => {
+  const startInterval = new Date(startTime);
+  const endInterval = new Date(endTime);
+
+  const sessions = await Session.find({
+    userId,
+    $or: [
+      { startTime: { $lt: endInterval, $gte: startInterval } },
+      { endTime: { $gt: startInterval, $lte: endInterval } },
+      { startTime: { $lte: startInterval }, endTime: { $gte: endInterval } },
+    ],
+    status: "scheduled",
+  }).sort({ startTime: 1 });
+
+  const slots = [];
+  let currentTime = startInterval;
+
+  for (const session of sessions) {
+    if (currentTime < session.startTime) {
+      slots.push({
+        start: new Date(currentTime),
+        end: new Date(session.startTime),
+      });
+    }
+    currentTime = new Date(session.endTime);
+  }
+
+  if (currentTime < endInterval) {
+    slots.push({
+      start: currentTime,
+      end: endInterval,
+    });
+  }
+
+  return slots;
+};
+
+// Endpoint to get available time slots in a given interval
+export const getSessionAvailability = async (req, res) => {
+  const { userId, startTime, endTime } = req.body;
+
+  if (!userId || !startTime || !endTime) {
+    return res.status(400).json({
+      message: "userId, startTime, and endTime are required",
+    });
+  }
+
+  try {
+    const availableSlots = await getAvailableSlotsInInterval(userId, startTime, endTime);
+
+    res.status(200).json({
+      message: "Available time slots retrieved successfully",
+      availableSlots,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "Error retrieving available time slots",
+      error: err.message,
+    });
+  }
+};
