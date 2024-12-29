@@ -79,6 +79,11 @@ const UserSchema = new mongoose.Schema(
         description: { type: String, maxlength: [500, "Description cannot exceed 500 characters"] },
       },
     ], // array of portfolio items
+    sessionsEnrolled :[{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Session",
+      required: true,
+    }],
 
   },
   {

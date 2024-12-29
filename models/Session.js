@@ -34,6 +34,7 @@ const sessionSchema = new mongoose.Schema(
       type: Number,  // duration in minutes
       required: true,
     },
+    participants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   },
   {
     timestamps: true,

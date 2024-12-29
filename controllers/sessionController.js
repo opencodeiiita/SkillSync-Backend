@@ -1,4 +1,5 @@
 import Session from "../models/Session.js";
+import User from "../models/User.js";
 
 export const createSession = async (req, res) => {
   //duration in minutes
@@ -215,3 +216,82 @@ export const getSessionAvailability = async (req, res) => {
     });
   }
 };
+
+
+// Enroll Users into session
+export const enrollUserIntoSession = async(req,res) => {
+
+  const {userId, sessionId} = req.body;
+  if(!userId || !sessionId){
+    return res.status(400).json({
+      message: "Both userId and sessionId are required",
+    });
+  }
+
+  try {
+
+    const user = await User.findById(userId);
+    const session = await Session.findById(sessionId);
+    if(!user || !session){
+      return res.status(404).json({
+        message: "User or session not found",
+      });
+    }
+
+    user.sessionsEnrolled.push(sessionId); // Add the session ID to the user's sessionsEnrolled array
+    await user.save();
+
+    session.participants.push(userId); // Add the user ID to the session's participants array
+    await session.save();
+
+    return res.status(200).json({
+      message: "User enrolled into session successfully",
+    });
+
+  }catch(err){
+    return res.status(500).json({
+      message: "Error enrolling user into session",
+      error: err.message,
+    });
+  }
+
+}
+
+// Remove Users from session
+export const removeUserFromSession = async(req,res) => {
+
+  const {userId, sessionId} = req.body;
+  if(!userId || !sessionId){
+    return res.status(400).json({
+      message: "Both userId and sessionId are required",
+    });
+  }
+
+  try {
+
+    const user = await User.findById(userId);
+    const session = await Session.findById(sessionId);
+    if(!user || !session){
+      return res.status(404).json({
+        message: "User or session not found",
+      });
+    }
+
+    user.sessionsEnrolled.pull(sessionId); // Remove the session ID from the user's sessionsEnrolled array
+    await user.save();
+
+    session.participants.pull(userId); // Remove the user ID from the session's participants array
+    await session.save();
+
+    return res.status(200).json({
+      message: "User removed from session successfully",
+    });
+
+  }catch(err){
+    return res.status(500).json({
+      message: "Error removing user from session",
+      error: err.message,
+    });
+  }
+
+}
