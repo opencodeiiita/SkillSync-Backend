@@ -91,7 +91,7 @@ const UserSchema = new mongoose.Schema(
   }
 );
 
-UserSchema.index({ email: 1 }, { unique: true });
+// UserSchema.index({ email: 1 }, { unique: true });
 UserSchema.index({ skills: 1 });
 
 UserSchema.pre("save", async function (next) {

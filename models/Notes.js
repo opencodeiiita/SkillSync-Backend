@@ -24,4 +24,4 @@ const NotesSchema = new mongoose.Schema({
     timestamps: true, // Adds createdAt and updatedAt fields
 });
 
-module.exports = mongoose.model('Note', NotesSchema);
+export default mongoose.model('Note', NotesSchema);
