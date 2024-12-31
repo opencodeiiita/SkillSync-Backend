@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import connectDb from "./config/db.js";
+import authRoutes from "./routes/authRoutes.js";
 import User from "./models/User.js";
 import sessionRoutes from "./routes/sessionRoutes.js";
 
@@ -37,6 +38,7 @@ app.post("/register", async (req, res) => {
   }
 });
 
+app.use('/auth', authRoutes);
 app.use("/session", sessionRoutes);
 
 app.get("/", (req, res) => {

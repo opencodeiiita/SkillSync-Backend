@@ -1,9 +1,7 @@
 import User from "../models/User.js";
 
 export const signup = async (req, res) => {
-
   try {
-
     const { name, email, username, password, skills, bio, profilePicture, portfolio } = req.body;
 
     if (!name || !email || !username || !password) {
@@ -15,7 +13,6 @@ export const signup = async (req, res) => {
       console.log(existingUser);
       return res.status(409).json({ message: "User with this email or username already exists." });
     }
-
 
     const user = new User({
       name,
@@ -30,19 +27,18 @@ export const signup = async (req, res) => {
 
     try {
       await user.save();
-    } 
-    catch (error) {
+    } catch (error) {
       res.status(500).json({ message: error.message });
       return;
     }
-    
+
     const token = user.generateAuthToken();
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+      secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 3600000, // 1 hour
+      maxAge: 3600000,
     });
 
     res.status(201).json({
@@ -54,12 +50,53 @@ export const signup = async (req, res) => {
         username: user.username,
       },
     });
-
-  } 
-  catch (error) {
-
+  } catch (error) {
     console.error("Signup Controller Error:", error);
     res.status(500).json({ message: "Internal server error. Please try again later." });
+  }
+};
 
+export const login = async (req, res) => {
+  try {
+    const { emailOrUsername, password } = req.body;
+
+    if (!emailOrUsername || !password) {
+      return res.status(400).json({ message: "Email/Username and password are required." });
+    }
+
+    const user = await User.findOne({
+      $or: [{ email: emailOrUsername }, { username: emailOrUsername }],
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    const isPasswordValid = await user.comparePassword(password); // Assuming a `comparePassword` method in your model
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Invalid credentials." });
+    }
+
+    const token = user.generateAuthToken();
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 3600000,
+    });
+
+    res.status(200).json({
+      message: "Login successful.",
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        username: user.username,
+      },
+    });
+  } catch (error) {
+    console.error("Login Controller Error:", error);
+    res.status(500).json({ message: "Internal server error. Please try again later." });
   }
 };
