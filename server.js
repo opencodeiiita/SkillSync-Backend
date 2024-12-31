@@ -4,6 +4,7 @@ import connectDb from "./config/db.js";
 import User from "./models/User.js";
 import sessionRoutes from "./routes/sessionRoutes.js";
 import userRoutes from "./routes/userRoutes.js"; // import userRoutes
+import notesRoutes from "./routes/notesRoutes.js";
 
 // Load environment variables
 dotenv.config();
@@ -53,6 +54,8 @@ app.post("/register", async (req, res) => {
 app.use("/api/users", userRoutes); 
 
 app.use("/session", sessionRoutes);
+
+app.use("/notes", notesRoutes);
 
 
 
