@@ -2,9 +2,12 @@ import mongoose from "mongoose";
 
 const connectDb = async () => {
   const mongoURI = process.env.MONGO_URI;
+<<<<<<< HEAD
+=======
 
   // Debug: Log the URI to confirm it's being loaded
   console.log("MONGO_URI from env:", mongoURI);
+>>>>>>> 9ac4d5a42ac5bbe9a79dd2c9f1208613bc2f95ff
 
   if (!mongoURI) {
     console.error("MongoDB URI is missing in environment variables.");
@@ -16,6 +19,7 @@ const connectDb = async () => {
     await mongoose.connect(mongoURI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 1000,
     });
     console.log(`MongoDB connected: ${mongoose.connection.host}`);
   } catch (error) {

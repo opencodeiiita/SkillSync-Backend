@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import connectDb from "./config/db.js";
+import authRoutes from "./routes/authRoutes.js";
 import User from "./models/User.js";
 import sessionRoutes from "./routes/sessionRoutes.js";
 import userRoutes from "./routes/userRoutes.js"; // import userRoutes
@@ -49,10 +50,14 @@ app.post("/register", async (req, res) => {
   }
 });
 
+<<<<<<< HEAD
+app.use('/auth', authRoutes);
+=======
 
 
 app.use("/api/users", userRoutes); 
 
+>>>>>>> 9ac4d5a42ac5bbe9a79dd2c9f1208613bc2f95ff
 app.use("/session", sessionRoutes);
 
 app.use("/notes", notesRoutes);
