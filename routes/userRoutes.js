@@ -1,5 +1,5 @@
 import express from "express";
-import { handleCreateUser ,handleUpdateUser} from "../controllers/userController.js";
+import { handleCreateUser ,handleUpdateUser,getAllNotesBySession,getAllSessionsByUser} from "../controllers/userController.js";
 import UserProfile from "../models/User.js";
 import authMiddleware from "../middleware/authMiddleware.js";
 console.log(authMiddleware);
@@ -121,5 +121,8 @@ router.put(
     }
   }
 );
+
+router.get('/sessions/:userId', getAllSessionsByUser);
+router.get('/sessions/:userId/:sessionId/notes', getAllNotesBySession);
 
 export default router;
