@@ -98,4 +98,25 @@ export const handleUpdateUser = async (req, res) => {
   }
 };
 
+export const getAllSessionsByUser = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    // Assuming you have a Session model to interact with the database
+    const sessions = await Session.find({ userId });
+    res.status(200).json(sessions);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getAllNotesBySession = async (req, res) => {
+  const { userId, sessionId } = req.params;
+  try {
+    // Assuming you have a Note model to interact with the database
+    const notes = await Note.find({ userId, sessionId });
+    res.status(200).json(notes);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
