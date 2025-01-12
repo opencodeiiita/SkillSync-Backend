@@ -71,3 +71,54 @@ export const getAllNotes = async (req, res) => {
       });
     }
   };
+
+  //Edit a note
+  export const editSessionNotes = async (req, res) => {
+
+    const { userId, sessionId, newNotes } = req.body;
+  
+    if (!userId || !sessionId || !newNotes) {
+      return res.status(400).json({
+        message: "userId, sessionId, and newNotes are required",
+      });
+    }
+  
+    try {
+
+      const session = await Session.findById(sessionId);
+  
+      if (!session) {
+        return res.status(404).json({
+          message: "Session not found",
+        });
+      }
+  
+      if (!session.participants.includes(userId)) {
+        return res.status(403).json({
+          message: "You are not authorized to edit notes for this session",
+        });
+      }
+  
+      const note = await Notes.findOne({ sessionId, userId });
+  
+      if (!note) {
+        return res.status(404).json({
+          message: "No notes found for the specified session and user",
+        });
+      }
+  
+      note.description = newNotes;
+      await note.save();
+  
+      res.status(200).json({
+        message: "Notes updated successfully",
+        note,
+      });
+    } 
+    catch (err) {
+      res.status(500).json({
+        message: "Error editing notes",
+        error: err.message,
+      });
+    }
+  };
