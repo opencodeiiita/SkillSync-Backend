@@ -2,7 +2,6 @@ import express from "express";
 import dotenv from "dotenv";
 import connectDb from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
-import User from "./models/User.js";
 import sessionRoutes from "./routes/sessionRoutes.js";
 import userRoutes from "./routes/userRoutes.js"; // import userRoutes
 import notesRoutes from "./routes/notesRoutes.js";
@@ -25,43 +24,14 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.post("/register", async (req, res) => {
-  const { fullName, email, username, password } = req.body;
-
-  try {
-    const user = new User({
-      fullName,
-      email,
-      username,
-      password,
-    });
-
-    await user.save();
-
-    res.status(201).json({
-      message: "User registered successfully!",
-      user,
-    });
-  } catch (err) {
-    res.status(500).json({
-      message: "Error registering user",
-      error: err.message,
-    });
-  }
-});
-
+//For signup, login
 app.use('/auth', authRoutes);
-
 
 app.use("/api/users", userRoutes); 
 
 app.use("/session", sessionRoutes);
 
 app.use("/notes", notesRoutes);
-
-
-
-
 
 // Root route
 

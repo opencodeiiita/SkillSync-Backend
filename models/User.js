@@ -1,5 +1,3 @@
-
-
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
@@ -15,7 +13,7 @@ password        String          Yes             Password. Minimum 6 char length.
 skills	        Array[String]	  Yes	            List of skills (e.g., "JavaScript", "Design"), atleast one must be provided.
 bio	            String	        No	            Short biography (max. 500 characters).
 profilePicture	String (URL)	  No	            URL to the profile picture (image formats only).
-portfolio	      String (URL)	  No	            URL to the user's portfolio website.
+portfolio	      Array	          No	            URL to the user's portfolio website.
 timestamps	    Auto	          N/A	            Automatically generated createdAt and updatedAt.
 */
 
@@ -32,7 +30,13 @@ timestamps	    Auto	          N/A	            Automatically generated createdAt 
   skills: ["JavaScript", "React", "Node.js"],
   bio: "Full Stack Developer with a passion for building web applications.",
   profilePicture: "https://example.com/john-doe.jpg",
-  portfolio: "https://johndoe.dev",
+  portfolio:[
+    {
+      "title": "My Personal Blog",
+      "url": "https://www.myblog.com",
+      "description": "A blog where I share my personal projects and articles on technology."
+    }
+  ]
 });*/
   
 const UserSchema = new mongoose.Schema(
@@ -74,11 +78,11 @@ const UserSchema = new mongoose.Schema(
     },
     portfolio: [
       {
-        title: { type: String, required: true },
-        url: { type: String, required: true, match: [/^https?:\/\/.+/, "Invalid portfolio URL"] },
+        title: { type: String },
+        url: { type: String, match: [/^https?:\/\/.+/, "Invalid portfolio URL"] },
         description: { type: String, maxlength: [500, "Description cannot exceed 500 characters"] },
       },
-    ], // array of portfolio items
+    ], // array of portfolio items    
     sessionsEnrolled :[{
       type: mongoose.Schema.Types.ObjectId,
       ref: "Session",
