@@ -2,27 +2,26 @@ import User from "../models/User.js";
 
 export const signup = async (req, res) => {
   try {
-    const { name, email, username, password, skills, bio, profilePicture, portfolio } = req.body;
+    const { name, email, password, skills, bio, profilePicture, portfolio } = req.body;
 
-    if (!name || !email || !username || !password) {
-      return res.status(400).json({ message: "Name, email, username, and password are required." });
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: "Name, email, and password are required." });
     }
 
-    const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+    const existingUser = await User.findOne({email});
     if (existingUser) {
       console.log(existingUser);
-      return res.status(409).json({ message: "User with this email or username already exists." });
+      return res.status(409).json({ message: "User with this email already exists." });
     }
 
     const user = new User({
       name,
       email,
-      username,
       password, // Will be hashed by User schema pre-save middleware
       skills: skills || [],
       bio: bio || "",
       profilePicture: profilePicture || "",
-      portfolio: portfolio || "",
+      portfolio: portfolio || [],
     });
 
     try {
@@ -47,7 +46,6 @@ export const signup = async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
-        username: user.username,
       },
     });
   } catch (error) {
@@ -55,52 +53,6 @@ export const signup = async (req, res) => {
     res.status(500).json({ message: "Internal server error. Please try again later." });
   }
 };
-
-export const login = async (req, res) => {
-  try {
-    const { emailOrUsername, password } = req.body;
-
-    if (!emailOrUsername || !password) {
-      return res.status(400).json({ message: "Email/Username and password are required." });
-    }
-
-    const user = await User.findOne({
-      $or: [{ email: emailOrUsername }, { username: emailOrUsername }],
-    });
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found." });
-    }
-
-    const isPasswordValid = await user.comparePassword(password); // Assuming a `comparePassword` method in your model
-    if (!isPasswordValid) {
-      return res.status(401).json({ message: "Invalid credentials." });
-    }
-
-    const token = user.generateAuthToken();
-
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 3600000,
-    });
-
-    res.status(200).json({
-      message: "Login successful.",
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        username: user.username,
-      },
-    });
-  } catch (error) {
-    console.error("Login Controller Error:", error);
-    res.status(500).json({ message: "Internal server error. Please try again later." });
-  }
-};
-
 
 export const signin = async (req, res) => {
 
